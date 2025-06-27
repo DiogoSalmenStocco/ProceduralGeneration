@@ -37,11 +37,11 @@ uma semente - seed, no inglês. Por exemplo: Com a seed 0, tenho retorno 1. Com 
 7, 2. Enfim, com uma seed aleatória, eu tenho um valor ((pseudo)) aleatório. Nesse caso
 didático, vamos limitar a seed e o retorno com valores de 0 a 8.
 A conta por trás desse caso se chama LCG - Gerador Linear Congruente - e é relativamente
-simples: calculamos a seed vezes 4 mais 1 e o resto desse valor dividido por 9 (de 0 a 8,
-lembra?) ((visual: (SEED x 4 + 1) mod 9)). Esse caso é cíclico, conforme mostra a tabela
-que eu coloquei aí pra vocês. Demonstrando rapidamente: 5 vezes 4 é 20, mais 1 dá 21, 
-dividido por 9 resulta 18 com resto 3, a terceira linha da tabela. Usando a resposta como 
-seed, você passa por todos valores.
+simples: calculamos a seed vezes 4 mais 1 e o resto da divisão por 9 desse valor (de 0 a 
+8, lembra?) ((visual: (SEED x 4 + 1) mod 9)). Esse caso é cíclico, conforme mostra a 
+tabela que eu coloquei aí pra vocês. Demonstrando rapidamente: 5 vezes 4 é 20, mais 1 dá 
+21, dividido por 9 resulta 18 com resto 3, a terceira linha da tabela. Usando a resposta 
+anterior como seed, você passa por todos valores.
 ```
 | Fórmula                          | Resultado |
 |----------------------------------|-----------|
@@ -58,7 +58,7 @@ seed, você passa por todos valores.
 
 - Pra quê serve?
 ```
-Assim, eu posso conseguir um número aleatoriamente - a seed - e, a partir dela, gerar
+Assim, eu posso conseguir um número aleatório - a seed - e, a partir dela, gerar
 outro valor (ou valores) também aleatórios ((agora de mentira))
 ```
 - Em criptografia
@@ -71,14 +71,15 @@ complexos demais pra esse vídeo quando se trata de evitar hackers persistentes.
 ```
 Para jogos e simulações como as que farei daqui a pouco, é utilizado o PRNG de Mersenne
 Twister, cujos cálculos não vem ao caso mas que garante uma geração menos cíclica que a
-anterior e atinge valores entre 0 e 2^19.937, considerando o uso de 19.937 bits. Isso
-equivale a um valor qualquer entre 0 e 4 3 2 zero zero zero, 6 mil zeros! Isso ultrapassa
-qualquer valor comum, bilhões têm 9 zeros, isso tem 6 mil!
+anterior e atinge valores bem mais abrangentes, entre 0 e 2^19.937, considerando o uso 
+de 19.937 bits - aproximadamente 2,5 kiloBytes. Isso equivale a um valor qualquer entre 
+0 e 4 3 2 zero zero zero, 6 mil zeros! Isso ultrapassa qualquer valor comum, bilhões têm 
+9 zeros, isso tem 6 mil!
 ```
 - Versão mais simples (shaders ou jogo 3D multiplayer online)
 ```
 Enfim, para jogos 3D multiplayers online e para shaders, a fim de evitar excesso de 
-processamento, PRNGs como o LCG utilizado anteriormente são leves e  extremamente
+processamento, PRNGs como o LCG utilizado anteriormente são leves e extremamente
 convenientes, pontanto não devem ser descartados!
 ```
 
@@ -91,15 +92,17 @@ algoritmo que pode ser usado para vários propósitos, no caso: geração de ár
 ```
 - Exemplo das árvores
 ```
-Olha essa árvore, que coisa linda. Para gerar ela, utilizei parâmetros como tamanho inicial
-, definhamento mínimo e máximo, chance de bifurcação, ângulo mínimo e máximo, profundidade
-e seed. Perceba que alterando apenas a seed, temos árvores semelhantes mas nunca iguais.
-Nesses casos mantive a chance de ramificação igual a 100%. Diminuindo pra 90%, e comparando
-os resultados, repare como se trata da mesma árvore com galhos a menos, algumas com mais
-azar, outras com menos. Voltando pra 100% e aumentando a profundidade, tenho árvores com
-mais e com menos folhas, podendo simular uma possível primavera ou inverno sem trocar a
-árvore inteira. Diferentes biomas teriam árvores naturalmente mais secas, mais redondas,
-enfim, basta ser criativo com os parâmetros.
+Olha essa árvore, que coisa linda. Para gerar ela, defini regras específicas pro tamanho 
+inicial, definhamento mínimo e máximo, chance de bifurcação, ângulo mínimo e máximo, 
+profundidade e seed. Perceba que alterando apenas a seed, temos árvores semelhantes mas 
+nunca iguais. Nesses casos mantive a chance de ramificação igual a 100%. Diminuindo pra 
+90%, e comparando os resultados, repare como se trata da mesma árvore com galhos a 
+menos, algumas com mais azar, outras com menos. Voltando pra 100% e modificando a 
+profundidade, temos árvores com mais e com menos folhas, podendo simular uma possível 
+primavera ou inverno sem trocar a árvore inteira. Diferentes biomas teriam árvores 
+diferentes, como essas árvores croissant, ou espanador, ou arbusto, ou até, ao invés 
+de árvores, masmorras - vulgo dungeons!
+
 Visando economizar processamento, uma estratégia comum é gerar árvores em jogos apenas
 quando o jogador se aproxima, e tudo que ele precisará ter salvo é a seed e a posição.
 Assim, uma floresta inteira pode ser gerada e regerada sem alterações. Detalhe: as
@@ -112,12 +115,12 @@ seja, um único valor retornaria uma floresta inteira!
 ```
 Outro algoritmo de geração procedural bastante familiar é o Perlin Noise e sua versão
 simplificada, o Simplex Noise. Originalmente, esse método utiliza conceitos de Geometria
-Analítica - para operações com vetores - e de Cálculo universitário - derivadas, no caso -
-então vamos focar no seu propósito e retorno.
-O principal uso evidente desse ruído é voltado para definição de terrenos, como no exemplo
-gerado a partir de uma simulação do Perlin Noite. Mudando a seed é possível obter 
-resultados bem distintos, e com aplicações mais precisas, o uso de parâmetros para criação
-e segmentação de biomas com vegetação e relevo próprio se torna viável.
+Analítica - para operações com vetores - e de Cálculo universitário - para derivadas -
+então vamos focar apenas no seu propósito e retorno.
+O principal uso desse ruído é voltado para definição de terrenos, como no exemplo
+gerado a partir de uma simulação do Perlin Noise. Mudando a seed é possível obter 
+resultados bem distintos, e, com aplicações mais precisas, o uso de parâmetros para 
+criação e segmentação de biomas com vegetação e relevo próprio se torna viável.
 ```
 
 ## Jogos de exemplo
@@ -170,7 +173,7 @@ procedural recuperável, bem como diferentes algoritmos com diferentes propósit
 Também vimos diversos exemplos interessantíssimos de jogos e filmes que arrasaram com uma
 mãozinha dessa tecnologia que é tão incrível.
 Eu realmente espero que você tenha gostado do vídeo! Se puder responder ao formulário de
-satisfação, que você encontra na descrição e no comentário fixada, eu serei eternamente
+satisfação, que você encontra na descrição e no comentário fixado, eu serei eternamente
 grato! Um grande abraço, e tchau tchau!
 ```
 ---
